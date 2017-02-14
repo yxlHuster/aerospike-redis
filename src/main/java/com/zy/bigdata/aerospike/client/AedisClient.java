@@ -7,6 +7,7 @@ import com.zy.bigdata.aerospike.util.AerospikeConfigUtils;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class AedisClient {
 
@@ -429,7 +430,7 @@ public class AedisClient {
 
     public String getRange(String key, long startOffset, long endOffset) {
         String result = get(key);
-        return result.substring((int)startOffset, (int)endOffset+1);
+        return result.substring((int) startOffset, (int) endOffset + 1);
     }
 
 
@@ -580,8 +581,10 @@ public class AedisClient {
     @SuppressWarnings("unchecked")
     public List<String> hmget(String key, String ...fields) {
         Key asKey = new Key(this.namespace, this.redisSet, key);
-        return (List<String>) this.asClient.execute(this.writePolicy, asKey, "redis", "HMGET", Value.get(this.redisBin),
+        List<Object> objects = (List<Object>) this.asClient.execute(this.writePolicy, asKey, "redis", "HMGET", Value.get(this.redisBin),
                 Value.get(new ArrayList<String>(Arrays.asList(fields))));
+        List<String> result = objects.stream().map(String::valueOf).collect(Collectors.toList());
+        return result;
     }
 
 
@@ -627,7 +630,9 @@ public class AedisClient {
     @SuppressWarnings("unchecked")
     public List<String> hvals(String key) {
         Key asKey = new Key(this.namespace, this.redisSet, key);
-        return (List<String>) this.asClient.execute(this.writePolicy, asKey, "redis", "HVALS", Value.get(this.redisBin));
+        List<Object> objects = (List<Object>) this.asClient.execute(this.writePolicy, asKey, "redis", "HVALS", Value.get(this.redisBin));
+        List<String> result = objects.stream().map(String::valueOf).collect(Collectors.toList());
+        return result;
     }
 
 
