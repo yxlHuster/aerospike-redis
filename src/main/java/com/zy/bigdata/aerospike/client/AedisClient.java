@@ -567,7 +567,7 @@ public class AedisClient {
         Key asKey = new Key(this.namespace, this.redisSet, key);
         Object result = this.asClient.execute(this.writePolicy, asKey, "redis", "HSETNX", Value.get(this.redisBin),
                 Value.get(field), Value.get(value));
-        return ((Integer)result).longValue();
+        return ((Long)result).longValue();
     }
 
 
