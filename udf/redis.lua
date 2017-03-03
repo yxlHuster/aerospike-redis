@@ -463,9 +463,9 @@ end
 
 
 function HMGET(rec, bin, field_list)
-	local exist = 0
+	local exist = false
 	if (EXISTS(rec, bin)) then
-		exist = 1
+		exist = true
 	end
 	local res_list = list()
 
